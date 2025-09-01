@@ -2,12 +2,15 @@
   "name": "bodyquery",
   "version": "1.0.0",
   "main": "server.js",
-  "type":"module",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "cls && node server.js"
+    "dev": "cls && nodemon server.js"
   },
-  "keywords": ["Senai", "Body & Query"],
+  "keywords": [
+    "Senai",
+    "Body & Query"
+  ],
   "author": "Gustavo Victor",
   "license": "MIT",
   "description": "",

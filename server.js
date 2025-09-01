@@ -3,7 +3,7 @@ import express from "express";
 import dotenv from "dotenv";
 
 import dados from "./src/data/dados.js";
-const { bruxos } = dados;
+const {bruxos, varinhas, pocoes, animais} = dados;
 
 // Criar aplicação com Express e configurar para aceitar JSON
 const app = express();
@@ -82,6 +82,92 @@ app.post("/bruxos", (req, res) => {
         message: "Novo bruxo adiconado a Hogwarts!",
         data: novoBruxo
     });
+});
+
+app.get('/varinhas', (req, res) => {
+  const { material, nucleo, comprimento} = req.query;
+  let resultado = varinhas;
+
+  if (material) {
+    resultado = resultado.filter(v => v.material.toLowerCase() === material.toLowerCase());
+  }
+
+  if (nucleo) {
+    resultado = resultado.filter(v => v.nucleo == nucleo);
+  }
+
+  if (comprimento) {
+    resultado = resultado.filter(v => v.comprimento.toLowerCase().includes(comprimento.toLowerCase()));
+  }
+
+  res.status(200).json({
+    total: resultado.length,
+    data: resultado
+  });
+});
+
+app.post("/varinhas", (req, res) => {
+  const {material, nucleo, comprimento} = req.body;
+
+  if (!material || !nucleo || !comprimento) {
+      return res.status(400).json({
+          success: false,
+          message: "Material, nucleo, comprimento são obrigatórios para uma varinhas!"
+      });
+  };
+
+// Cria uma varinha com os dados de body
+  const novaVarinha = {
+      id: varinhas.length + 1,
+      material: material || "Ainda não definido", 
+      nucleo: nucleo || "Ainda não definido",
+      comprimento: comprimento || "Ainda não definido",
+  };
+
+  // Adicionar à lista de varinhas
+  varinhas.push(novaVarinha);
+
+  res.status(201).json({
+      succsess: true,
+      message: "Nova varinha adiconada!",
+      data: novaVarinha
+  });
+});
+
+app.get('/pocoes', (req, res) => {
+  const { nome, efeito} = req.query;
+  let resultado = pocoes;
+
+  if (nome) {
+    resultado = resultado.filter(p => p.nome.toLowerCase() === nome.toLowerCase());
+  }
+
+  if (efeito) {
+    resultado = resultado.filter(p => p.efeito.toLowerCase().includes(efeito.toLowerCase()));
+  }
+
+  res.status(200).json({
+    total: resultado.length,
+    data: resultado
+  });
+});
+
+app.get('/animais', (req, res) => {
+  const { nome, tipo} = req.query;
+  let resultado = animais;
+
+  if (nome) {
+    resultado = resultado.filter(a => a.nome.toLowerCase() === nome.toLowerCase());
+  }
+
+  if (tipo) {
+    resultado = resultado.filter(a => a.tipo.toLowerCase().includes(tipo.toLowerCase()));
+  }
+
+  res.status(200).json({
+    total: resultado.length,
+    data: resultado
+  });
 });
 
 // Iniciar servidor escutando na porta definida
